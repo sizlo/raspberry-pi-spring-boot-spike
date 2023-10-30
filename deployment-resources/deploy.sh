@@ -1,9 +1,5 @@
 #!/bin/bash
 
-echo "***********************************************"
-echo "Running deploy.sh at $(date)"
-echo "***********************************************"
-
 # Install java if required
 if [ ! -d "jdk-17-ga" ]; then
   echo "Installing raspberry pi 1 compatible jdk..."
@@ -31,11 +27,10 @@ URL="$(echo $RELEASE_JSON | jq -r '.assets[0].browser_download_url')"
 wget $URL
 echo "jar downloaded"
 
-if [ -f "app.log" ]; then
-  echo "Backing up previous app log"
-  mv app.log previous_app.log
-  echo "Previous app log backed up"
-fi
+echo "Removing stale logs"
+ls app_*.log | tail +6 | xargs -I {} rm {}
+ls deploy_*.log | tail +6 | xargs -I {} rm {}
+echo "Removed stale logs"
 
 echo "Running jar"
-jdk-17-ga/bin/java -jar "$FILENAME" > app.log 2>&1
+jdk-17-ga/bin/java -jar "$FILENAME" > "app_$(date '+%Y-%m-%d_%H:%M:%S.%N').log" 2>&1

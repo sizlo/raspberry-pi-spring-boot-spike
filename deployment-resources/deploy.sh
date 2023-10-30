@@ -8,6 +8,14 @@ if [ ! -d "jdk-17-ga" ]; then
   echo "jdk installed"
 fi
 
+# Install jq if required
+if ! command -v jq &> /dev/null
+then
+    echo "Installing jq"
+    sudo apt install jq
+    echo "jq installed"
+fi
+
 echo "Downloading latest jar"
 RELEASE_JSON="$(curl https://api.github.com/repos/sizlo/raspberry-pi-spring-boot-spike/releases/latest)"
 FILENAME="$(echo $RELEASE_JSON | jq -r '.assets[0].name')"

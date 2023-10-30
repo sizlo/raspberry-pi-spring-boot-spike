@@ -20,6 +20,10 @@ then
     echo "jq installed"
 fi
 
+echo "Deleting previous jars"
+rm -rf *.jar
+echo "Previous jars deleted"
+
 echo "Downloading latest jar"
 RELEASE_JSON="$(curl https://api.github.com/repos/sizlo/raspberry-pi-spring-boot-spike/releases/latest)"
 FILENAME="$(echo $RELEASE_JSON | jq -r '.assets[0].name')"

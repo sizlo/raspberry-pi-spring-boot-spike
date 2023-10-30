@@ -4,8 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class RaspberrypispringbootspikeApplication
+class Application
 
 fun main(args: Array<String>) {
-	runApplication<RaspberrypispringbootspikeApplication>(*args)
+	runApplication<Application>(*args)
 }

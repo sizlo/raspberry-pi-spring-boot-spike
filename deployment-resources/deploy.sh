@@ -27,5 +27,11 @@ URL="$(echo $RELEASE_JSON | jq -r '.assets[0].browser_download_url')"
 wget $URL
 echo "jar downloaded"
 
+if [ -f "app.log" ]; then
+  echo "Backing up previous app log"
+  mv app.log previous_app.log
+  echo "Previous app log backed up"
+fi
+
 echo "Running jar"
-jdk-17-ga/bin/java -jar "$FILENAME"
+jdk-17-ga/bin/java -jar "$FILENAME" > app.log 2>&1

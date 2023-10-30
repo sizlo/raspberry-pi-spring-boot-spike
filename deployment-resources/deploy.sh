@@ -12,7 +12,7 @@ fi
 if ! command -v jq &> /dev/null
 then
     echo "Installing jq"
-    sudo apt install jq
+    sudo apt install jq -y
     echo "jq installed"
 fi
 

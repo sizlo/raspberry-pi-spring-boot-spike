@@ -1,5 +1,9 @@
 #!/bin/bash
 
+echo "***********************************************"
+echo "Running deploy.sh at $(date)"
+echo "***********************************************"
+
 # Install java if required
 if [ ! -d "jdk-17-ga" ]; then
   echo "Installing raspberry pi 1 compatible jdk..."

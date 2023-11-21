@@ -1,0 +1,21 @@
+<html>
+    <body>
+        <h1>Books</h1>
+        <p th:if="${books.empty}">No books yet</p>
+        <table th:if="${!books.empty}">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="book : ${books}">
+                    <td th:text="${book.title}"></td>
+                    <td th:text="${book.category}"></td>
+                </tr>
+            </tbody>
+        </table>
+        <a href="/books/add">Add a book</a>
+    </body>
+</html>

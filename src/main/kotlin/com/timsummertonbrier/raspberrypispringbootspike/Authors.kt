@@ -3,6 +3,7 @@ package com.timsummertonbrier.raspberrypispringbootspike
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Controller
@@ -20,6 +21,16 @@ data class Author(
     val lastName: String,
 ) {
     val name = "$firstName $lastName"
+
+    companion object {
+        fun fromRow(row: ResultRow): Author {
+            return Author(
+                row[Authors.id].value,
+                row[Authors.firstName],
+                row[Authors.lastName]
+            )
+        }
+    }
 }
 
 data class AuthorRequest(
@@ -39,9 +50,7 @@ object Authors : IntIdTable("author") {
 @Transactional
 class AuthorRepository {
     fun getAllAuthors(): List<Author> {
-        return Authors.selectAll().map {
-            Author(it[Authors.id].value, it[Authors.firstName], it[Authors.lastName])
-        }
+        return Authors.selectAll().map { Author.fromRow(it) }
     }
 
     fun addAuthor(author: AuthorRequest) {

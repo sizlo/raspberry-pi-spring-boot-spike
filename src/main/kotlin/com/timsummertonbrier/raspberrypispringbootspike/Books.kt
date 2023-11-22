@@ -4,6 +4,7 @@ import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Positive
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Controller
@@ -20,7 +21,22 @@ data class Book(
     val title: String,
     val category: String,
     val author: Author,
-)
+) {
+    companion object {
+        fun fromRow(row: ResultRow): Book {
+            return Book(
+                row[Books.id].value,
+                row[Books.title],
+                row[Books.category],
+                Author(
+                    row[Authors.id].value,
+                    row[Authors.firstName],
+                    row[Authors.lastName]
+                )
+            )
+        }
+    }
+}
 
 data class BookRequest(
     @field:NotBlank
@@ -43,18 +59,7 @@ object Books : IntIdTable("book") {
 @Transactional
 class BookRepository {
     fun getAllBooks(): List<Book> {
-        return (Books innerJoin Authors).selectAll().map {
-            Book(
-                it[Books.id].value,
-                it[Books.title],
-                it[Books.category],
-                Author(
-                    it[Authors.id].value,
-                    it[Authors.firstName],
-                    it[Authors.lastName]
-                )
-            )
-        }
+        return (Books innerJoin Authors).selectAll().map { Book.fromRow(it) }
     }
 
     fun addBook(book: BookRequest) {

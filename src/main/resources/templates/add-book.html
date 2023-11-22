@@ -1,25 +1,28 @@
-<html>
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
     <body>
-        <h1>Add Book</h1>
-        <form action="#" th:action="@{/books/add}" th:object="${book}" method="post">
-            <div>
-                <label for="title">Title</label>
-                <input type="text" th:field="*{title}" id="title" />
-                <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
-            </div>
-            <div>
-                <label for="category">Category</label>
-                <input type="text" th:field="*{category}" id="category" />
-                <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
-            </div>
-            <div>
-                <label for="authorId">Author</label>
-                <select th:field="*{authorId}" id="authorId">
-                    <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
-                </select>
-                <span th:if="${#fields.hasErrors('authorId')}" th:errors="*{authorId}"></span>
-            </div>
-            <input type="submit" value="Add book" />
-        </form>
+        <div layout:fragment="content">
+            <h1>Add Book</h1>
+            <form action="#" th:action="@{/books/add}" th:object="${book}" method="post">
+                <div>
+                    <label for="title">Title</label>
+                    <input type="text" th:field="*{title}" id="title" />
+                    <span th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+                </div>
+                <div>
+                    <label for="category">Category</label>
+                    <input type="text" th:field="*{category}" id="category" />
+                    <span th:if="${#fields.hasErrors('category')}" th:errors="*{category}"></span>
+                </div>
+                <div>
+                    <label for="authorId">Author</label>
+                    <select th:field="*{authorId}" id="authorId">
+                        <option th:each="author : ${authors}" th:value="${author.id}" th:text="${author.name}"></option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('authorId')}" th:errors="*{authorId}"></span>
+                </div>
+                <input type="submit" value="Add book" />
+            </form>
+        </div>
     </body>
 </html>

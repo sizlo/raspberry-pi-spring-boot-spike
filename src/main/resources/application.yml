@@ -9,6 +9,7 @@ spring:
     password: password
   exposed:
     generate-ddl: true
+    show-sql: true
   h2:
     console:
       enabled: true

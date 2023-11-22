@@ -2,25 +2,22 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
     <body>
         <div layout:fragment="content">
-            <h1>Books</h1>
-            <p th:if="${books.empty}">No books yet</p>
+            <h1>Books in <span th:text="${category}"></span></h1>
+            <p th:if="${books.empty}">No books in this category</p>
             <table th:if="${!books.empty}">
                 <thead>
                     <tr>
                         <th>Title</th>
-                        <th>Category</th>
                         <th>Author</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="book : ${books}">
                         <td th:text="${book.title}"></td>
-                        <td th:text="${book.category}"></td>
                         <td th:text="${book.author.name}"></td>
                     </tr>
                 </tbody>
             </table>
-            <a href="/books/add">Add a book</a>
         </div>
     </body>
 </html>

@@ -5,14 +5,16 @@
         <table th:if="${!books.empty}">
             <thead>
                 <tr>
-                    <th>Name</th>
+                    <th>Title</th>
                     <th>Category</th>
+                    <th>Author</th>
                 </tr>
             </thead>
             <tbody>
                 <tr th:each="book : ${books}">
                     <td th:text="${book.title}"></td>
                     <td th:text="${book.category}"></td>
+                    <td th:text="|${book.author.name}|"></td>
                 </tr>
             </tbody>
         </table>

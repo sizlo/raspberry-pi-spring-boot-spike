@@ -2,10 +2,10 @@
 <html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout}">
     <body>
         <div layout:fragment="content">
-            <h1>Add Author</h1>
-            <form action="#" th:action="@{/authors/add}" th:object="${authorRequest}" method="post">
+            <h1>Edit Author</h1>
+            <form action="#" th:action="@{/authors/update/{id}(id = ${id})}" th:object="${authorRequest}" method="post">
                 <div th:replace="fragments/author-fields :: author-fields"></div>
-                <input type="submit" value="Add author" />
+                <input type="submit" value="Update author" />
             </form>
         </div>
     </body>

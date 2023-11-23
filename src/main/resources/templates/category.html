@@ -3,8 +3,8 @@
     <body>
         <div layout:fragment="content">
             <h1>Books in <span th:text="${category}"></span></h1>
-            <p th:if="${books.empty}">No books in this category</p>
-            <table th:if="${!books.empty}">
+            <p th:if="${books.isEmpty()}">No books in this category</p>
+            <table th:if="${!books.isEmpty()}">
                 <thead>
                     <tr>
                         <th>Title</th>

@@ -3,8 +3,8 @@
     <body>
         <div layout:fragment="content">
             <h1>Authors</h1>
-            <p th:if="${authors.empty}">No authors yet</p>
-            <table th:if="${!authors.empty}">
+            <p th:if="${authors.isEmpty()}">No authors yet</p>
+            <table th:if="${!authors.isEmpty()}">
                 <thead>
                     <tr>
                         <th>First name</th>
@@ -15,6 +15,7 @@
                     <tr th:each="author : ${authors}">
                         <td th:text="${author.firstName}"></td>
                         <td th:text="${author.lastName}"></td>
+                        <td><a th:href="@{/authors/edit/{id}(id = ${author.id})}">Edit</a></td>
                     </tr>
                 </tbody>
             </table>

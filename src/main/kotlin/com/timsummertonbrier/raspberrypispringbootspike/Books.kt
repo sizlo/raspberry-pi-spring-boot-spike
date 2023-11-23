@@ -79,7 +79,7 @@ class BookRepository {
     }
 
     fun getBook(id: Int): Book {
-        return (Books innerJoin Authors).select({ Books.id eq id }).map { Book.fromRow(it) }.first()
+        return (Books innerJoin Authors).select { Books.id eq id }.map { Book.fromRow(it) }.first()
     }
 
     fun addBook(bookRequest: BookRequest) {

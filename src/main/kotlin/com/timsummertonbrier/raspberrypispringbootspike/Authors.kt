@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -69,7 +68,7 @@ class AuthorRepository {
     }
 
     fun getAuthor(id: Int): Author {
-        return Authors.select({ Authors.id eq id }).map { Author.fromRow(it) }.first()
+        return Authors.select { Authors.id eq id }.map { Author.fromRow(it) }.first()
     }
 
     fun addAuthor(authorRequest: AuthorRequest) {

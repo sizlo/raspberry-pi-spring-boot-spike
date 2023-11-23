@@ -4,7 +4,7 @@
         <div layout:fragment="content">
             <h1>Edit Author</h1>
             <form action="#" th:action="@{/authors/update/{id}(id = ${id})}" th:object="${authorRequest}" method="post">
-                <div th:replace="fragments/author-fields :: author-fields"></div>
+                <div th:replace="~{fragments/author-fields :: author-fields}"></div>
                 <input type="submit" value="Update author" />
             </form>
         </div>

@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.ModelAttribute
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestMapping
@@ -115,8 +116,7 @@ class AuthorController(private val authorRepository: AuthorRepository) {
     }
 
     @PostMapping("/update/{id}")
-    // TODO - form errors do not work, spring throws a 400 instead of entering this method
-    fun updateBook(@Valid authorRequest: AuthorRequest, @PathVariable("id") id: Int, bindingResult: BindingResult): String {
+    fun updateBook(@PathVariable("id") id: Int, @Valid authorRequest: AuthorRequest, bindingResult: BindingResult): String {
         if (bindingResult.hasErrors()) {
             return "edit-author"
         }

@@ -130,8 +130,7 @@ class BookController(private val bookRepository: BookRepository, private val aut
     }
 
     @PostMapping("/update/{id}")
-    // TODO - form errors do not work, spring throws a 400 instead of entering this method
-    fun updateBook(@Valid bookRequest: BookRequest, @PathVariable("id") id: Int, bindingResult: BindingResult, model: Model): String {
+    fun updateBook(@PathVariable("id") id: Int, @Valid bookRequest: BookRequest, bindingResult: BindingResult, model: Model): String {
         if (bindingResult.hasErrors()) {
             model.addAttribute("authors", authorRepository.getAllAuthors())
             return "edit-book"

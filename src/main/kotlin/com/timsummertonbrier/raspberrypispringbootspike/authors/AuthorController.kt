@@ -2,13 +2,12 @@ package com.timsummertonbrier.raspberrypispringbootspike.authors
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
+import org.jetbrains.exposed.exceptions.ExposedSQLException
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestMapping
+import org.springframework.web.bind.annotation.*
+import java.sql.SQLIntegrityConstraintViolationException
 
 data class Author(
     val id: Int,
@@ -70,12 +69,33 @@ class AuthorController(private val authorRepository: AuthorRepository) {
     }
 
     @PostMapping("/update/{id}")
-    fun updateBook(@PathVariable("id") id: Int, @Valid authorRequest: AuthorRequest, bindingResult: BindingResult): String {
+    fun updateAuthor(@PathVariable("id") id: Int, @Valid authorRequest: AuthorRequest, bindingResult: BindingResult): String {
         if (bindingResult.hasErrors()) {
             return "authors/edit"
         }
 
         authorRepository.updateAuthor(id, authorRequest)
+        return "redirect:/authors"
+    }
+
+    /**
+     * We need to include the authorRequest object as a model attribute so the current state of the edit form
+     * is preserved if the delete fails.
+     * A better implementation would be to have a view author page, which is separate from the edit author page.
+     * The form would be on the edit page, the delete button on the view page.
+     */
+    @DeleteMapping("/delete/{id}")
+    fun deleteAuthor(@PathVariable("id") id: Int, authorRequest: AuthorRequest, model: Model): String {
+        try {
+            authorRepository.deleteAuthor(id)
+        } catch (e: ExposedSQLException) {
+            if (e.cause is SQLIntegrityConstraintViolationException) {
+                model.addAttribute("error", "Could not delete author as they still have books")
+                return "authors/edit"
+            } else {
+                throw e
+            }
+        }
         return "redirect:/authors"
     }
 }

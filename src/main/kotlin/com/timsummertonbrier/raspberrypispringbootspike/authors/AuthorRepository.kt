@@ -2,6 +2,7 @@ package com.timsummertonbrier.raspberrypispringbootspike.authors
 
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -41,5 +42,9 @@ class AuthorRepository {
 
     fun updateAuthor(id: Int, authorRequest: AuthorRequest) {
         Authors.update({ Authors.id eq id }) { it.populateFrom(authorRequest) }
+    }
+
+    fun deleteAuthor(id: Int) {
+        Authors.deleteWhere { Authors.id eq id }
     }
 }

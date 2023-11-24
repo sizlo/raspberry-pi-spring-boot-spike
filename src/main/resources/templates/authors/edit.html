@@ -3,10 +3,26 @@
     <body>
         <div layout:fragment="content">
             <h1>Edit Author</h1>
+
             <form action="#" th:action="@{/authors/update/{id}(id = ${id})}" th:object="${authorRequest}" method="post">
                 <div th:replace="~{authors/author-fields :: author-fields}"></div>
                 <input type="submit" value="Update author" />
             </form>
+
+            <!--
+            If the delete fails we want to return to this page with all fields populated as they are now.
+            To achieve this our delete request needs to include the current form contents as a model attribute.
+            This means we need to include the authorRequest object on the delete form, and the form needs to contain
+            all the relevant input fields. We can place the input fields inside a hidden div.
+            -->
+            <form action="#" th:action="@{/authors/delete/{id}(id = ${id})}" th:object="${authorRequest}" th:method="delete">
+                <div style="display: none">
+                    <div th:replace="~{authors/author-fields :: author-fields}"></div>
+                </div>
+                <div th:replace="~{fragments/delete-button :: delete-button}"></div>
+            </form>
+
+            <p th:if="${error}" th:text="${error}">
         </div>
     </body>
 </html>

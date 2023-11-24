@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Positive
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
+import org.springframework.web.bind.annotation.DeleteMapping
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.PostMapping
@@ -87,6 +88,12 @@ class BookController(private val bookRepository: BookRepository, private val aut
         }
 
         bookRepository.updateBook(id, bookRequest)
+        return "redirect:/books"
+    }
+
+    @DeleteMapping("/delete/{id}")
+    fun deleteBook(@PathVariable("id") id: Int): String {
+        bookRepository.deleteBook(id)
         return "redirect:/books"
     }
 }

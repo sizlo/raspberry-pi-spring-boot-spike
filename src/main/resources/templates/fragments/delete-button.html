@@ -1,0 +1,12 @@
+<div th:fragment="delete-button">
+    <script type="text/javascript">
+        function showDeletePrompt() {
+            document.getElementById("delete-prompt").style.display = "inline"
+        }
+    </script>
+    <input type="button" value="Delete" onclick="showDeletePrompt()" />
+    <span id="delete-prompt" style="display:none">
+            <span>Are you sure?</span>
+            <input type="submit" value="Yes!" />
+    </span>
+</div>

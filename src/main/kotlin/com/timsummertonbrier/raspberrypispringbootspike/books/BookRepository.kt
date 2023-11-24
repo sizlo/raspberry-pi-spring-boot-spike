@@ -4,6 +4,7 @@ import com.timsummertonbrier.raspberrypispringbootspike.authors.Author
 import com.timsummertonbrier.raspberrypispringbootspike.authors.Authors
 import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
@@ -50,5 +51,9 @@ class BookRepository {
 
     fun updateBook(id: Int, bookRequest: BookRequest) {
         Books.update({ Books.id eq id }) { it.populateFrom(bookRequest) }
+    }
+
+    fun deleteBook(id: Int) {
+        Books.deleteWhere { Books.id eq id }
     }
 }

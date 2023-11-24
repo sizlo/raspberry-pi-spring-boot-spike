@@ -7,6 +7,9 @@
                 <div th:replace="~{books/book-fields :: book-fields}"></div>
                 <input type="submit" value="Update book" />
             </form>
+            <form action="#" th:action="@{/books/delete/{id}(id = ${id})}" th:method="delete">
+                <div th:replace="~{fragments/delete-button :: delete-button}"></div>
+            </form>
         </div>
     </body>
 </html>

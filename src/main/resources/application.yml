@@ -17,3 +17,6 @@ spring:
 logging:
   file:
     name: ${APP_LOG_FILE_LOCATION:./build}/app.log
+
+app:
+  version: ${version}

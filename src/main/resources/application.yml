@@ -13,3 +13,7 @@ spring:
   h2:
     console:
       enabled: true
+
+logging:
+  file:
+    name: ${APP_LOG_FILE_LOCATION:./build}/app.log

@@ -27,10 +27,9 @@ URL="$(echo $RELEASE_JSON | jq -r '.assets[0].browser_download_url')"
 wget $URL
 echo "jar downloaded"
 
-echo "Removing stale logs"
-ls app_*.log | tail +6 | xargs -I {} rm {}
+echo "Removing stale deployment logs"
 ls deploy_*.log | tail +6 | xargs -I {} rm {}
-echo "Removed stale logs"
+echo "Removed stale deployment logs"
 
 echo "Running jar"
-jdk-17-ga/bin/java -jar "$FILENAME" > "app_$(date '+%Y-%m-%d_%H:%M:%S.%N').log" 2>&1
+jdk-17-ga/bin/java -jar "$FILENAME"

@@ -2,7 +2,8 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
     <head>
         <meta charset="UTF-8">
-        <title>RPI Spring Spike</title>
+        <title layout:title-pattern="$LAYOUT_TITLE - $CONTENT_TITLE">RPI Spring Spike</title>
+        <link th:href="@{/global.css}" rel="stylesheet" />
     </head>
 
     <body>

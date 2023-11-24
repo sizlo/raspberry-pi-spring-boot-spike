@@ -1,13 +1,8 @@
-package com.timsummertonbrier.raspberrypispringbootspike
+package com.timsummertonbrier.raspberrypispringbootspike.authors
 
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
-import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.springframework.stereotype.Controller
-import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,16 +16,6 @@ data class Author(
     val lastName: String,
 ) {
     val name = "$firstName $lastName"
-
-    companion object {
-        fun fromRow(row: ResultRow): Author {
-            return Author(
-                row[Authors.id].value,
-                row[Authors.firstName],
-                row[Authors.lastName]
-            )
-        }
-    }
 }
 
 data class AuthorRequest(
@@ -50,36 +35,6 @@ data class AuthorRequest(
     }
 }
 
-object Authors : IntIdTable("author") {
-    var firstName = text("firstName")
-    var lastName = text("lastName")
-
-    fun UpdateBuilder<Int>.populateFrom(authorRequest: AuthorRequest) {
-        this[firstName] = authorRequest.firstName!!
-        this[lastName] = authorRequest.lastName!!
-    }
-}
-
-@Repository
-@Transactional
-class AuthorRepository {
-    fun getAllAuthors(): List<Author> {
-        return Authors.selectAll().map { Author.fromRow(it) }
-    }
-
-    fun getAuthor(id: Int): Author {
-        return Authors.select { Authors.id eq id }.map { Author.fromRow(it) }.first()
-    }
-
-    fun addAuthor(authorRequest: AuthorRequest) {
-        Authors.insert { it.populateFrom(authorRequest) }
-    }
-
-    fun updateAuthor(id: Int, authorRequest: AuthorRequest) {
-        Authors.update({ Authors.id eq id }) { it.populateFrom(authorRequest) }
-    }
-}
-
 @Controller
 @RequestMapping("/authors")
 class AuthorController(private val authorRepository: AuthorRepository) {
@@ -87,13 +42,13 @@ class AuthorController(private val authorRepository: AuthorRepository) {
     @GetMapping
     fun authors(model: Model): String {
         model.addAttribute("authors", authorRepository.getAllAuthors())
-        return "authors"
+        return "authors/view-all"
     }
 
     @GetMapping("/add")
     fun showAddAuthorForm(model: Model): String {
         model.addAttribute("authorRequest", AuthorRequest())
-        return "add-author"
+        return "authors/add"
     }
 
     @GetMapping("/edit/{id}")
@@ -101,13 +56,13 @@ class AuthorController(private val authorRepository: AuthorRepository) {
         model
             .addAttribute("id", id)
             .addAttribute("authorRequest", AuthorRequest.fromAuthor(authorRepository.getAuthor(id)))
-        return "edit-author"
+        return "authors/edit"
     }
 
     @PostMapping("/add")
     fun addAuthor(@Valid authorRequest: AuthorRequest, bindingResult: BindingResult): String {
         if (bindingResult.hasErrors()) {
-            return "add-author"
+            return "authors/add"
         }
 
         authorRepository.addAuthor(authorRequest)
@@ -117,7 +72,7 @@ class AuthorController(private val authorRepository: AuthorRepository) {
     @PostMapping("/update/{id}")
     fun updateBook(@PathVariable("id") id: Int, @Valid authorRequest: AuthorRequest, bindingResult: BindingResult): String {
         if (bindingResult.hasErrors()) {
-            return "edit-author"
+            return "authors/edit"
         }
 
         authorRepository.updateAuthor(id, authorRequest)

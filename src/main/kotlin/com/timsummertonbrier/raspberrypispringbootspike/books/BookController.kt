@@ -1,14 +1,11 @@
-package com.timsummertonbrier.raspberrypispringbootspike
+package com.timsummertonbrier.raspberrypispringbootspike.books
 
+import com.timsummertonbrier.raspberrypispringbootspike.authors.Author
+import com.timsummertonbrier.raspberrypispringbootspike.authors.AuthorRepository
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Positive
-import org.jetbrains.exposed.dao.id.IntIdTable
-import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.statements.UpdateBuilder
 import org.springframework.stereotype.Controller
-import org.springframework.stereotype.Repository
-import org.springframework.transaction.annotation.Transactional
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.GetMapping
@@ -21,22 +18,7 @@ data class Book(
     val title: String,
     val category: String,
     val author: Author,
-) {
-    companion object {
-        fun fromRow(row: ResultRow): Book {
-            return Book(
-                row[Books.id].value,
-                row[Books.title],
-                row[Books.category],
-                Author(
-                    row[Authors.id].value,
-                    row[Authors.firstName],
-                    row[Authors.lastName]
-                )
-            )
-        }
-    }
-}
+)
 
 data class BookRequest(
     @field:NotBlank
@@ -59,38 +41,6 @@ data class BookRequest(
     }
 }
 
-object Books : IntIdTable("book") {
-    var title = text("title")
-    var category = text("category")
-    var authorId = reference("author_id", Authors)
-
-    fun UpdateBuilder<Int>.populateFrom(bookRequest: BookRequest) {
-        this[title] = bookRequest.title!!
-        this[category] = bookRequest.category!!
-        this[authorId] = bookRequest.authorId!!
-    }
-}
-
-@Repository
-@Transactional
-class BookRepository {
-    fun getAllBooks(): List<Book> {
-        return (Books innerJoin Authors).selectAll().map { Book.fromRow(it) }
-    }
-
-    fun getBook(id: Int): Book {
-        return (Books innerJoin Authors).select { Books.id eq id }.map { Book.fromRow(it) }.first()
-    }
-
-    fun addBook(bookRequest: BookRequest) {
-        Books.insert { it.populateFrom(bookRequest) }
-    }
-
-    fun updateBook(id: Int, bookRequest: BookRequest) {
-        Books.update({ Books.id eq id }) { it.populateFrom(bookRequest) }
-    }
-}
-
 @Controller
 @RequestMapping("/books")
 class BookController(private val bookRepository: BookRepository, private val authorRepository: AuthorRepository) {
@@ -98,7 +48,7 @@ class BookController(private val bookRepository: BookRepository, private val aut
     @GetMapping
     fun books(model: Model): String {
         model.addAttribute("books", bookRepository.getAllBooks())
-        return "books"
+        return "books/view-all"
     }
 
     @GetMapping("/add")
@@ -106,7 +56,7 @@ class BookController(private val bookRepository: BookRepository, private val aut
         model
             .addAttribute("bookRequest", BookRequest())
             .addAttribute("authors", authorRepository.getAllAuthors())
-        return "add-book"
+        return "books/add"
     }
 
     @GetMapping("/edit/{id}")
@@ -115,14 +65,14 @@ class BookController(private val bookRepository: BookRepository, private val aut
             .addAttribute("id", id)
             .addAttribute("bookRequest", BookRequest.fromBook(bookRepository.getBook(id)))
             .addAttribute("authors", authorRepository.getAllAuthors())
-        return "edit-book"
+        return "books/edit"
     }
 
     @PostMapping("/add")
     fun addBook(@Valid bookRequest: BookRequest, bindingResult: BindingResult, model: Model): String {
         if (bindingResult.hasErrors()) {
             model.addAttribute("authors", authorRepository.getAllAuthors())
-            return "add-book"
+            return "books/add"
         }
 
         bookRepository.addBook(bookRequest)
@@ -133,7 +83,7 @@ class BookController(private val bookRepository: BookRepository, private val aut
     fun updateBook(@PathVariable("id") id: Int, @Valid bookRequest: BookRequest, bindingResult: BindingResult, model: Model): String {
         if (bindingResult.hasErrors()) {
             model.addAttribute("authors", authorRepository.getAllAuthors())
-            return "edit-book"
+            return "books/edit"
         }
 
         bookRepository.updateBook(id, bookRequest)

@@ -1,5 +1,6 @@
 package com.timsummertonbrier.raspberrypispringbootspike
 
+import com.timsummertonbrier.raspberrypispringbootspike.categories.CategoryRepository
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.web.bind.annotation.GetMapping

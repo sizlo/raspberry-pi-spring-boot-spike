@@ -4,7 +4,7 @@
         <div layout:fragment="content">
             <h1>Add Book</h1>
             <form action="#" th:action="@{/books/add}" th:object="${bookRequest}" method="post">
-                <div th:replace="~{fragments/book-fields :: book-fields}"></div>
+                <div th:replace="~{books/book-fields :: book-fields}"></div>
                 <input type="submit" value="Add book" />
             </form>
         </div>

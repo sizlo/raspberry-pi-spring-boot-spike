@@ -1,5 +1,9 @@
-package com.timsummertonbrier.raspberrypispringbootspike
+package com.timsummertonbrier.raspberrypispringbootspike.categories
 
+import com.timsummertonbrier.raspberrypispringbootspike.authors.Authors
+import com.timsummertonbrier.raspberrypispringbootspike.books.Book
+import com.timsummertonbrier.raspberrypispringbootspike.books.Books
+import com.timsummertonbrier.raspberrypispringbootspike.books.toBook
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
 import org.springframework.stereotype.Controller
@@ -18,7 +22,7 @@ class CategoryRepository {
     }
 
     fun getBooksInCategory(category: String): List<Book> {
-        return (Books innerJoin Authors).select { Books.category eq category }.map { Book.fromRow(it) }
+        return (Books innerJoin Authors).select { Books.category eq category }.map { it.toBook() }
     }
 }
 
@@ -30,6 +34,6 @@ class CategoryController(private val categoryRepository: CategoryRepository) {
         model
             .addAttribute("category", category)
             .addAttribute("books", categoryRepository.getBooksInCategory(category))
-        return "category"
+        return "categories/view-one"
     }
 }

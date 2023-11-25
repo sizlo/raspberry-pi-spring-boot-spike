@@ -26,8 +26,6 @@ dependencies {
 	implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
 	implementation("org.flywaydb:flyway-core")
 	implementation("org.postgresql:postgresql")
-	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
-	implementation("org.jetbrains.kotlin:kotlin-reflect")
 
 	implementation("org.jetbrains.exposed:exposed-spring-boot-starter:0.44.1")
 

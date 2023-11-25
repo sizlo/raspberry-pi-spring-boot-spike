@@ -61,7 +61,7 @@ PATH=$PATH:/usr/bin
   log "Removed stale deployment logs"
 
   log "Sourcing app environment from file"
-  source $FOLDER/raspberrypi.env
+  . $FOLDER/raspberrypi.env
   log "Sourced app environment"
 
   log "Deployment complete, running jar"

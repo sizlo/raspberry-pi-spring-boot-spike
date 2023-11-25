@@ -1,6 +1,6 @@
 #!/bin/bash
 
-function log {
+log () {
   DATE=$(date "+%Y-%m-%d_%H:%M:%S.%N")
   echo "$DATE - $@"
 }

@@ -4,7 +4,9 @@
         <div layout:fragment="content">
             <h1>Home</h1>
             <h2>Categories</h2>
-            <a th:each="category : ${categories}" th:href="@{/categories/{c}(c = ${category})}" th:text="${category}"></a>
+            <div th:each="category : ${categories}">
+                <a th:href="@{/categories/{c}(c = ${category})}" th:text="${category}"></a>
+            </div>
         </div>
     </body>
 </html>

@@ -3,11 +3,11 @@ package com.timsummertonbrier.raspberrypispringbootspike.authors
 import jakarta.validation.Valid
 import jakarta.validation.constraints.NotBlank
 import org.jetbrains.exposed.exceptions.ExposedSQLException
+import org.postgresql.util.PSQLState
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
 import org.springframework.validation.BindingResult
 import org.springframework.web.bind.annotation.*
-import java.sql.SQLIntegrityConstraintViolationException
 
 data class Author(
     val id: Int,
@@ -89,7 +89,7 @@ class AuthorController(private val authorRepository: AuthorRepository) {
         try {
             authorRepository.deleteAuthor(id)
         } catch (e: ExposedSQLException) {
-            if (e.cause is SQLIntegrityConstraintViolationException) {
+            if (e.sqlState == PSQLState.FOREIGN_KEY_VIOLATION.state) {
                 model.addAttribute("error", "Could not delete author as they still have books")
                 return "authors/edit"
             } else {

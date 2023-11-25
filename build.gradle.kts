@@ -24,7 +24,8 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-validation")
 
 	implementation("nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect")
-	implementation("com.h2database:h2")
+	implementation("org.flywaydb:flyway-core")
+	implementation("org.postgresql:postgresql")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 

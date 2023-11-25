@@ -1,3 +1,7 @@
-body {
+table, th, td {
     border: solid darkred;
+}
+
+table {
+    border-collapse: collapse;
 }

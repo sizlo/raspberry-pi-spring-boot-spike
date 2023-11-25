@@ -38,3 +38,4 @@ out/
 
 ### Project specific ###
 **/app.log
+**/*.env

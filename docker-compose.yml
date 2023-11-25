@@ -1,0 +1,13 @@
+version: '3.6'
+services:
+  postgres:
+    image: postgres:15
+    restart: always
+    expose:
+      - "5432"
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_DB: "raspberry_pi_spring_boot_spike"
+      POSTGRES_USER: "local-user"
+      POSTGRES_PASSWORD: "local-password"

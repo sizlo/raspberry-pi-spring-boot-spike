@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository
 import org.springframework.transaction.annotation.Transactional
 
 object Authors : IntIdTable("author") {
-    var firstName = text("firstName")
-    var lastName = text("lastName")
+    var firstName = text("first_name")
+    var lastName = text("last_name")
 
     fun UpdateBuilder<Int>.populateFrom(authorRequest: AuthorRequest) {
         this[firstName] = authorRequest.firstName!!

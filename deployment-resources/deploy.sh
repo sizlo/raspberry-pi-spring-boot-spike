@@ -12,13 +12,13 @@ FOLDER=$HOME/raspberry-pi-spring-boot-spike
 
   # Install java if required
   log "Checking for java 17 on the PATH"
-  if java --version | grep -q "17.\d.\d"; then
+  if java --version | grep -q "\b17\b"; then
     JAVA_COMMAND="java"
     log "Found java 17 on the PATH"
   else
     log "Could not find java 17 on the PATH"
     log "Checking for java 17 in app folder"
-    if $FOLDER/jdk-17-ga/bin/java --version | grep -q "17.\d.\d"; then
+    if $FOLDER/jdk-17-ga/bin/java --version | grep -q "\b17\b"; then
       JAVA_COMMAND=$FOLDER/jdk-17-ga/bin/java
       log "Found java 17 in app folder"
     else
@@ -32,7 +32,7 @@ FOLDER=$HOME/raspberry-pi-spring-boot-spike
   fi
 
   # Install jq if required
-  if ! command -v jq &> /dev/null
+  if ! which jq &> /dev/null
   then
       log "Installing jq"
       sudo apt install jq -y

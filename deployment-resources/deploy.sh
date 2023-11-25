@@ -7,6 +7,9 @@ log () {
 
 FOLDER=$HOME/raspberry-pi-spring-boot-spike
 
+# jq is installed here, but when run from cron this directory is not on the path
+PATH=$PATH:/usr/bin
+
 {
   log "Deployment started"
 
@@ -32,11 +35,14 @@ FOLDER=$HOME/raspberry-pi-spring-boot-spike
   fi
 
   # Install jq if required
-  if ! which jq &> /dev/null
+  log "Checking for jq on the PATH"
+  if which jq &> /dev/null
   then
-      log "Installing jq"
-      sudo apt install jq -y
-      log "jq installed"
+    log "Found jq on the PATH"
+  else
+    log "Installing jq"
+    sudo apt install jq -y
+    log "jq installed"
   fi
 
   log "Deleting previous jars"

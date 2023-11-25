@@ -21,9 +21,12 @@ upgradeVersion () {
   CURRENT_VERSION=$(getVersionFromBuildGradle)
   NEW_VERSION=$1
 
-  echo "Upgrading version in build files from $CURRENT_VERSION tp $NEW_VERSION"
-  sed -i "" "s/version[ \t]*=[ \t]*\"$CURRENT_VERSION\"/version = \"$NEW_VERSION\"/g" build.gradle.kts
-  gitCommitAndPush "Upgrade version from $CURRENT_VERSION to $NEW_VERSION"
+  if [[ $CURRENT_VERSION != $NEW_VERSION ]]
+  then
+    echo "Upgrading version in build files from $CURRENT_VERSION tp $NEW_VERSION"
+    sed -i "" "s/version[ \t]*=[ \t]*\"$CURRENT_VERSION\"/version = \"$NEW_VERSION\"/g" build.gradle.kts
+    gitCommitAndPush "Upgrade version from $CURRENT_VERSION to $NEW_VERSION"
+  fi
 }
 
 RELEASE_TYPE=$1

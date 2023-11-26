@@ -45,16 +45,29 @@ PATH=$PATH:/usr/bin
     log "jq installed"
   fi
 
-  log "Deleting previous jars"
-  rm -rf $FOLDER/*.jar
-  log "Previous jars deleted"
-
-  log "Downloading latest jar"
+  log "Getting latest release info"
   RELEASE_JSON="$(curl https://api.github.com/repos/sizlo/raspberry-pi-spring-boot-spike/releases/latest)"
   JAR_FILENAME="$(echo $RELEASE_JSON | jq -r '.assets[0].name')"
   URL="$(echo $RELEASE_JSON | jq -r '.assets[0].browser_download_url')"
-  wget -P $FOLDER $URL
-  log "jar downloaded"
+  RELEASE_JAR_MD5="$(echo $RELEASE_JSON | jq -r '.body' | grep "^jar md5:" | cut -f 3 -w)"
+  log "Got latest release info"
+
+  EXISTING_JAR_FILEPATH=$(ls $FOLDER/*.jar)
+  EXISTING_JAR_MD5=$(ms5 -q $EXISTING_JAR_FILEPATH)
+
+  if [[ $EXISTING_JAR_MD5 == $RELEASE_JAR_MD5 ]]
+  then
+    log "Local jar md5 matches release jar md5, skipping jar download"
+    JAR_FILEPATH=$EXISTING_JAR_FILEPATH
+  else
+    log "Deleting previous jars"
+    rm -rf $FOLDER/*.jar
+    log "Previous jars deleted"
+    log "Downloading jar from release"
+    wget -P $FOLDER $URL
+    log "jar downloaded"
+    JAR_FILEPATH=$FOLDER/$JAR_FILENAME
+  fi
 
   log "Removing stale deployment logs"
   ls $FOLDER/deploy_*.log | sort -r | tail +6 | xargs -I {} rm {}
@@ -67,4 +80,4 @@ PATH=$PATH:/usr/bin
   log "Deployment complete, running jar"
 } > $FOLDER/deploy_$(date "+%Y-%m-%d_%H:%M:%S.%N").log 2>&1
 
-$JAVA_COMMAND -jar $FOLDER/$JAR_FILENAME
+$JAVA_COMMAND -jar $JAR_FILEPATH

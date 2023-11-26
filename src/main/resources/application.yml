@@ -61,7 +61,7 @@ spring:
   datasource:
     url: jdbc:h2:mem:testdb
     # IntelliJ shows an error here claiming that the class is not on the path
-    # This is because it is only brought in with testImplementation in an effor
+    # This is because it is only brought in with testImplementation in an effort
     # to keep our jar as lightweight as possible
     driver-class-name: org.h2.Driver
     username: sa

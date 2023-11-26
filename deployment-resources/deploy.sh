@@ -49,15 +49,15 @@ PATH=$PATH:/usr/bin
   RELEASE_JSON="$(curl https://api.github.com/repos/sizlo/raspberry-pi-spring-boot-spike/releases/latest)"
   JAR_FILENAME="$(echo $RELEASE_JSON | jq -r '.assets[0].name')"
   URL="$(echo $RELEASE_JSON | jq -r '.assets[0].browser_download_url')"
-  RELEASE_JAR_MD5="$(echo $RELEASE_JSON | jq -r '.body' | grep "^jar md5:" | cut -f 3 -w)"
+  RELEASE_JAR_SHA1SUM="$(echo $RELEASE_JSON | jq -r '.body' | grep '^jar sha1sum:' | cut -f 3 -d ' ')"
   log "Got latest release info"
 
   EXISTING_JAR_FILEPATH=$(ls $FOLDER/*.jar)
-  EXISTING_JAR_MD5=$(ms5 -q $EXISTING_JAR_FILEPATH)
+  EXISTING_JAR_SHA1SUM=$(sha1sum $EXISTING_JAR_FILEPATH | cut -f 1 -d " ")
 
-  if [[ $EXISTING_JAR_MD5 == $RELEASE_JAR_MD5 ]]
+  if [[ $EXISTING_JAR_SHA1SUM == $RELEASE_JAR_SHA1SUM ]]
   then
-    log "Local jar md5 matches release jar md5, skipping jar download"
+    log "Local jar sha1sum matches release jar sha1sum, skipping jar download"
     JAR_FILEPATH=$EXISTING_JAR_FILEPATH
   else
     log "Deleting previous jars"

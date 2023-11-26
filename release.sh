@@ -84,14 +84,14 @@ fi
 
 echo "Building jar"
 ./gradlew clean build
-JAR_MD5=$(md5 -q "build/libs/raspberrypispringbootspike-$RELEASE_VERSION.jar")
+JAR_SHA1SUM=$(sha1sum "build/libs/raspberrypispringbootspike-$RELEASE_VERSION.jar" | cut -f 1 -d " ")
 
 echo "Creating github release $RELEASE_VERSION"
 gh release create \
   "v$RELEASE_VERSION" \
   "./build/libs/raspberrypispringbootspike-$RELEASE_VERSION.jar" \
   --title $RELEASE_VERSION \
-  --notes "jar md5: $JAR_MD5" \
+  --notes "jar sha1sum: $JAR_SHA1SUM" \
   --latest
 
 SNAPSHOT_VERSION="$RELEASE_MAJOR.$RELEASE_MINOR.$((RELEASE_PATCH + 1))-SNAPSHOT"

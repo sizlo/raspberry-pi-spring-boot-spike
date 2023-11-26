@@ -14,7 +14,7 @@ getVersionFromLatestGitRelease () {
 }
 
 getVersionFromBuildGradle () {
-  grep 'version\s*=\s*"\d*\.\d*\.\d*"' build.gradle.kts | cut -f 2 -d '"'
+  grep 'version\s*=\s*"\d*\.\d*\.\d*.*"' build.gradle.kts | cut -f 2 -d '"'
 }
 
 upgradeVersion () {
@@ -23,7 +23,7 @@ upgradeVersion () {
 
   if [[ $CURRENT_VERSION != $NEW_VERSION ]]
   then
-    echo "Upgrading version in build files from $CURRENT_VERSION tp $NEW_VERSION"
+    echo "Upgrading version in build files from $CURRENT_VERSION to $NEW_VERSION"
     sed -i "" "s/version[ \t]*=[ \t]*\"$CURRENT_VERSION\"/version = \"$NEW_VERSION\"/g" build.gradle.kts
     gitCommitAndPush "Upgrade version from $CURRENT_VERSION to $NEW_VERSION"
   fi

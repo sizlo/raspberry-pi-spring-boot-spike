@@ -55,7 +55,7 @@ PATH=$PATH:/usr/bin
   EXISTING_JAR_FILEPATH=$(ls $FOLDER/*.jar)
   EXISTING_JAR_SHA1SUM=$(sha1sum $EXISTING_JAR_FILEPATH | cut -f 1 -d " ")
 
-  if [[ $EXISTING_JAR_SHA1SUM == $RELEASE_JAR_SHA1SUM ]]
+  if [ $EXISTING_JAR_SHA1SUM = $RELEASE_JAR_SHA1SUM ]
   then
     log "Local jar sha1sum matches release jar sha1sum, skipping jar download"
     JAR_FILEPATH=$EXISTING_JAR_FILEPATH

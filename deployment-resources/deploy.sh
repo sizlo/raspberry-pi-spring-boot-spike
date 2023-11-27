@@ -5,7 +5,12 @@ log () {
   echo "$DATE - $@"
 }
 
-FOLDER=$HOME/raspberry-pi-spring-boot-spike
+APP_NAME=raspberry-pi-spring-boot-spike
+GITHUB_USER=sizlo
+
+GITHUB_REPO=https://github.com/$GITHUB_USER/$APP_NAME
+GITHUB_REPO_API=https://api.github.com/repos/$GITHUB_USER/$APP_NAME
+FOLDER=$HOME/$APP_NAME
 
 # jq is installed here, but when run from cron this directory is not on the path
 PATH=$PATH:/usr/bin
@@ -27,7 +32,7 @@ PATH=$PATH:/usr/bin
     else
       log "Could not find java 17 in app folder"
       log "Installing raspberry pi 1 compatible jdk..."
-      wget -P $FOLDER https://github.com/sizlo/raspberry-pi-spring-boot-spike/raw/main/deployment-resources/jdk-17-ga_gcc-10.1_glibc-2.28_binutils-2.31_Buster.tar.gz
+      wget -P $FOLDER $GITHUB_REPO/raw/main/deployment-resources/jdk-17-ga_gcc-10.1_glibc-2.28_binutils-2.31_Buster.tar.gz
       tar zxf $FOLDER/jdk-17-ga_gcc-10.1_glibc-2.28_binutils-2.31_Buster.tar.gz -C $FOLDER
       log "Raspberry pi 1 compatible jdk installed"
       JAVA_COMMAND=$FOLDER/jdk-17-ga/bin/java
@@ -46,7 +51,7 @@ PATH=$PATH:/usr/bin
   fi
 
   log "Getting latest release info"
-  RELEASE_JSON="$(curl https://api.github.com/repos/sizlo/raspberry-pi-spring-boot-spike/releases/latest)"
+  RELEASE_JSON="$(curl $GITHUB_REPO_API/releases/latest)"
   JAR_FILENAME="$(echo $RELEASE_JSON | jq -r '.assets[0].name')"
   URL="$(echo $RELEASE_JSON | jq -r '.assets[0].browser_download_url')"
   RELEASE_JAR_SHA1SUM="$(echo $RELEASE_JSON | jq -r '.body' | grep '^jar sha1sum:' | cut -f 3 -d ' ')"

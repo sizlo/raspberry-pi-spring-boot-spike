@@ -82,14 +82,16 @@ then
   upgradeVersion $RELEASE_VERSION
 fi
 
+JAR_PATH="build/libs/raspberrypispringbootspike-$RELEASE_VERSION.jar"
+
 echo "Building jar"
 ./gradlew clean build
-JAR_SHA1SUM=$(sha1sum "build/libs/raspberrypispringbootspike-$RELEASE_VERSION.jar" | cut -f 1 -d " ")
+JAR_SHA1SUM=$(sha1sum $JAR_PATH | cut -f 1 -d " ")
 
 echo "Creating github release $RELEASE_VERSION"
 gh release create \
   "v$RELEASE_VERSION" \
-  "./build/libs/raspberrypispringbootspike-$RELEASE_VERSION.jar" \
+  $JAR_PATH \
   --title $RELEASE_VERSION \
   --notes "jar sha1sum: $JAR_SHA1SUM" \
   --latest

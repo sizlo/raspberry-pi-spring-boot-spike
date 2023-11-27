@@ -4,6 +4,10 @@ spring:
     username: ${DATABASE_USER}
     password: ${DATABASE_PASSWORD}
     hikari:
+      # The postgres provider I am using has a limit of 5 active connections,
+      # and during dev when connecting to the database manually for debugging
+      # I regularly hit this limit. Keep our connection pool size low to avoid
+      # this. Consider increasing the pool size when active dev is less frequent.
       maximum-pool-size: 2
   flyway:
     locations: classpath:db/migration/common

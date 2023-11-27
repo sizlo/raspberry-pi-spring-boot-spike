@@ -10,7 +10,7 @@ gitCommitAndPush () {
 }
 
 getVersionFromLatestGitRelease () {
-  gh release view | grep "^tag:" | cut -f 2 -w | sed "s/v//"
+  gh release view 2> /dev/null | grep "^tag:" | cut -f 2 -w | sed "s/v//"
 }
 
 getVersionFromBuildGradle () {
@@ -51,11 +51,18 @@ then
 fi
 
 STARTING_VERSION=$(getVersionFromLatestGitRelease)
+
+if [[ -z "${STARTING_VERSION}" ]]
+then
+  STARTING_VERSION=0.0.0
+  echo "No github release found, starting from version 0.0.1"
+else
+  echo "Found version $STARTING_VERSION from latest git release"
+fi
+
 STARTING_MAJOR=$(echo $STARTING_VERSION | cut -f 1 -d .)
 STARTING_MINOR=$(echo $STARTING_VERSION | cut -f 2 -d .)
 STARTING_PATCH=$(echo $STARTING_VERSION | cut -f 3 -d .)
-
-echo "Found version $STARTING_VERSION from latest git release"
 
 if [[ $RELEASE_TYPE == major ]]
 then

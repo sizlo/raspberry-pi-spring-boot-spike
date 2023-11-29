@@ -17,6 +17,6 @@ class GlobalModelAttributes(
             jdbcUrl.contains("_dev") -> "dev"
             else -> "prod"
         }
-        return "$appVersion - running on: $appEnvironment - database: $databaseEnvironment"
+        return "$appVersion - framework: spring boot - running on: $appEnvironment - database: $databaseEnvironment"
     }
 }

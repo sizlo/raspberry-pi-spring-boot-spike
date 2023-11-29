@@ -8,7 +8,7 @@ plugins {
 }
 
 group = "com.timsummertonbrier"
-version = "0.0.7"
+version = "0.0.8-SNAPSHOT"
 
 java {
 	sourceCompatibility = JavaVersion.VERSION_17

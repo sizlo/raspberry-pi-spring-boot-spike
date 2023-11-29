@@ -55,6 +55,7 @@ There is a deploy script to install java if required, download the jar of the la
     @reboot sleep 30; curl https://raw.githubusercontent.com/sizlo/raspberry-pi-spring-boot-spike/main/deployment-resources/deploy.sh | sh
     ```
 - Restart the Raspberry Pi
+- Once the app has started up it will be available at [http://raspberrypi.local:8080/](http://raspberrypi.local:8080/)
 
 You can view deployment logs in `$HOME/raspberry-pi-spring-boot-spike/deploy_<datetime>.log`. Logs for latest 5 deployments are kept. 
 
